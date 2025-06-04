@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CLOUD ACADEMY</title>
+    <link rel="icon" href="favicon.ico" />
+    <meta name="description"
+        content="منصة أكاديمية  لتعلم التصميم الجرافيكي وتجربة المستcloudخدم من خلال دورات ومشاريع عملية." />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --bg-main: #0f2027;
+            --bg-secondary: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --accent: #00f5d4;
+            --card-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body.light {
+            --bg-main: #f7f8fa;
+            --bg-secondary: #ffffff;
+            --text-main: #222222;
+            --accent: #2b2d42;
+            --card-border: #ddd;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-main);
+            color: var(--text-main);
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        header {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 30px rgba(0, 245, 212, 0.3);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            background: linear-gradient(90deg, var(--accent), #2ec4b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .toggle-theme {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 1.6rem;
+            cursor: pointer;
+            margin-left: 1rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .light .toggle-theme {
+            color: #2b2d42;
+        }
+
+        .toggle-theme:hover {
+            transform: scale(1.2);
+        }
+
+        section {
+            padding: 3rem 2rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+
+            margin-bottom: 1rem;
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        .about,
+        .contact,
+        .portfolio {
+            background: var(--bg-secondary);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            backdrop-filter: blur(16px);
+            padding: 1.5rem;
+
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 40px rgba(0, 245, 212, 0.15);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .portfolio-item {
+            background: rgba(0, 245, 212, 0.08);
+            border: 1px solid rgba(0, 245, 212, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0, 245, 212, 0.25);
+            color: var(--text-main);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-item:hover {
+            box-shadow: 0 0 25px var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .portfolio-item h3 {
+            margin: 0.8rem 0 0 0;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .portfolio-item p {
+            margin: 0.3rem 0 0 0;
+            font-size: clamp(0.85rem, 2.5vw, 1rem);
+            opacity: 0.85;
+        }
+
+        #lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        #lightbox.active {
+            display: flex;
+        }
+
+        #lightbox img {
+            max-width: 90vw;
+            max-height: 80vh;
+            border-radius: 15px;
+            box-shadow: 0 0 20px var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        #lightbox .caption {
+            color: var(--accent);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        #lightbox .controls {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        #lightbox button {
+            background: var(--accent);
+            border: none;
+            padding: 0.6rem 1rem;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--bg-main);
+            box-shadow: 0 0 12px var(--accent);
+            transition: background 0.3s ease;
+        }
+
+        #lightbox button:hover {
+            background: #00e6c4;
+        }
+
+        #lightbox .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            background: transparent;
+            font-size: 2.5rem;
+            color: var(--accent);
+            cursor: pointer;
+            border: none;
+            filter: drop-shadow(0 0 4px var(--accent));
+            transition: color 0.3s ease;
+        }
+
+        #lightbox .close-btn:hover {
+            color: #00f5d4;
+        }
+
+        .social-icons {
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            color: var(--accent);
+            margin: 0 0.5rem;
+            font-size: 1.7rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.3);
+            color: #fff;
+            text-shadow: 0 0 8px var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            color: #ccc;
+            background: transparent;
+            border-top: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero {
+            background-image: url('cloud/بطيخ.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 40vh;
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .hero-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            padding: 2rem;
+            border-radius: 20px;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin: 0 0 1rem;
+            background: linear-gradient(90deg, var(--accent), #2ec4b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+
+            margin-bottom: 2rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 245, 212, 0.5);
+        }
+
+        .hero-button {
+            font-size: 1.3rem;
+            background: var(--accent);
+            color: var(--bg-main);
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 0 15px var(--accent);
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .hero-button:hover {
+            background: #00e6c4;
+            transform: scale(1.05);
+        }
+
+        details {
+            background: var(--bg-secondary);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        details[open] summary {
+            color: var(--accent);
+        }
+
+        details summary {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        details p {
+            margin: 0.5rem 0 0;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        img,
+        video {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        section {
+            padding: 2rem 1rem;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav {
+                margin-top: 1rem;
+            }
+
+            nav a {
+                margin-left: 0.5rem;
+                margin-right: 0.5rem;
+                font-size: 1rem;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>أكاديمية Cloud</h1>
+        <div style="display: flex; align-items: center;">
+            <button class="toggle-theme" onclick="toggleTheme()" title="تبديل الوضع" aria-label="تبديل الوضع">
+                <i id="theme-icon" class="fas fa-moon"></i>
+            </button>
+            <nav>
+                <a href="#about">من نحن</a>
+                <a href="#portfolio">أعمالنا</a>
+                <a href="#contact">تواصل معنا</a>
+            </nav>
+        </div>
+    </header>
+    <section class="hero">
+        <div class="hero-overlay">
+            <h1 class="hero-title">أكاديمية Cloud</h1>
+            <p class="hero-subtitle">الأكاديمية الاحترافية</p>
+            <a href="#contact" class="hero-button">تواصل معنا</a>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <h2 class="section-title">من نحن</h2>
+        <p>أكاديمية Cloud هي منصة تعليمية متخصصة في التصميم الجرافيكي والواجهات وتجربة المستخدم. نهدف إلى تمكين المصممين
+            من خلال دورات عالية الجودة ومشاريع تطبيقية واقعية.</p>
+    </section>
+
+    <section id="portfolio" class="portfolio">
+        <h2 class="section-title">أعمالنا</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-item" tabindex="0" role="button">
+                <img src="cloud/بنر.jpeg" alt="تصميم بنر" />
+                <h3>تصميم بنر</h3>
+                <p>دروس بنر احترافية </p>
+            </div>
+            <div class="portfolio-item" tabindex="0" role="button">
+                <img src="cloud/برش.jpeg" alt="تصميم برش" />
+                <h3>تصميم برش</h3>
+                <p>دروس برش احترافية </p>
+            </div>
+            <div class="portfolio-item" tabindex="0" role="button">
+                <img src="cloud/سي فور.jpeg" alt="تصميم سي فور دي" />
+                <h3>تصميم C4D</h3>
+                <p>دروس C4D احترافية</p>
+            </div>
+            <div class="portfolio-item" tabindex="0" role="button">
+                <img src="cloud/قالب.jpeg" alt="تصميم قالب" />
+                <h3>تصميم قوالب</h3>
+                <p>ظروس قوالب احترافية</p>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section id="faq" class="about">
+        <h2 class="section-title">الأسئلة الشائعة</h2>
+        <details>
+            <summary>ما هي تخصصات الأكاديمية؟</summary>
+            <p>نقدم دورات في تصميم GFX والقوالب والاغلفة</p>
+        </details>
+        <details>
+            <summary>هل الدورات مجانية؟</summary>
+            <p>نوفّر دورات مجانية بمستويات متعددة لتناسب الجميع.</p>
+        </details>
+        <details>
+            <summary>هل أحتاج خبرة سابقة؟</summary>
+            <p>نعم تحتاج تعلم الاساسيات لبرنامج ibis paint x </p>
+        </details>
+
+    </section>
+
+    <section id="team" class="portfolio">
+        <h2 class="section-title">فريق العمل</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-item">
+                <img src="cloud/بطيخة.jpeg" alt="بيطخة - مصمم واجهات" />
+                <h3>بطيخة ساما</h3>
+                <p>خبير تصميم واجهات وتجربة المستخدم</p>
+            </div>
+            <div class="portfolio-item">
+                <img src="cloud/آصف.jpeg" alt="آصف - مدرب جرافيك" />
+                <h3>آصف</h3>
+                <p>مدرب تصميم جرافيكي </p>
+            </div>
+            <div class="portfolio-item">
+                <img src="cloud/اينوس.jpeg" alt="اينوس - مسؤول " />
+                <h3>اينوس</h3>
+                <p>مسؤول ومدير الاكادمية</p>
+            </div>
+            <div class="portfolio-item">
+                <img src="cloud/سانس.jpeg" alt="سانس - دعم فني" />
+                <h3>سانس</h3>
+                <p>دعم فني وتنسيق المتدربين</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2 class="section-title">تواصل معنا</h2>
+        <p>للتواصل أو الاستفسارات، الرجاء مراسلتنا عبر البريد الإلكتروني: <strong>contact@couldacademy.com</strong></p>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/share/1BshqKb6wD/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://x.com/harth83629?t=GIDoUg2pNXf5PEnZRYm5kg&s=09" target="_blank"><i
+                    class="fab fa-x-twitter"></i></a>
+            <a href="https://www.instagram.com/kaser._.40/" target="_blank"><i class="fab fa-instagram"></i></a>
+
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2025 أكاديمية Cloud. جميع الحقوق محفوظة.
+    </footer>
+
+    <div id="lightbox">
+        <button class="close-btn" aria-label="إغلاق">&times;</button>
+        <img src="" alt="" />
+        <div class="caption"></div>
+        <div class="controls">
+            <button id="prevBtn"><i class="fas fa-chevron-right" style="transform: rotate(180deg);"></i></button>
+            <button id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            const icon = document.getElementById('theme-icon');
+            icon.className = document.body.classList.contains('light') ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        const items = document.querySelectorAll('.portfolio-item');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = lightbox.querySelector('img');
+        const caption = lightbox.querySelector('.caption');
+        const closeBtn = lightbox.querySelector('.close-btn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        let index = 0;
+
+        function open(indexVal) {
+            index = indexVal;
+            const item = items[index];
+            const img = item.querySelector('img');
+            const title = item.querySelector('h3').textContent;
+            const desc = item.querySelector('p').textContent;
+            lightboxImage.src = img.src;
+            lightboxImage.alt = img.alt;
+            caption.textContent = title + ' - ' + desc;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function close() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function next() {
+            index = (index + 1) % items.length;
+            open(index);
+        }
+
+        function prev() {
+            index = (index - 1 + items.length) % items.length;
+            open(index);
+        }
+
+        items.forEach((el, i) => {
+            el.addEventListener('click', () => open(i));
+            el.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    open(i);
+                }
+            });
+        });
+
+        closeBtn.addEventListener('click', close);
+        nextBtn.addEventListener('click', next);
+        prevBtn.addEventListener('click', prev);
+
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.classList.contains('active')) {
+                if (e.key === 'Escape') close();
+                else if (e.key === 'ArrowRight') next();
+                else if (e.key === 'ArrowLeft') prev();
+            }
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) close();
+        });
+    </script>
+</body>
+
+</html>
